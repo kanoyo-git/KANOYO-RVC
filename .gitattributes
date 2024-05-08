@@ -28,6 +28,7 @@ saved_model/**/* filter=crlf diff=crlf merge=crlf -text
 *.tar filter=crlf diff=crlf merge=crlf -text
 *.tflite filter=crlf diff=crlf merge=crlf -text
 *.tgz filter=crlf diff=crlf merge=crlf -text
+*.wasm filter=crlf diff=crlf merge=crlf -text
 *.xz filter=crlf diff=crlf merge=crlf -text
 *.zip filter=crlf diff=crlf merge=crlf -text
 *.zst filter=crlf diff=crlf merge=crlf -text
