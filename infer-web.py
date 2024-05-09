@@ -1782,11 +1782,16 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                 ![ilaria](https://i.ytimg.com/vi/5PWqt2Wg-us/maxresdefault.jpg)
             ''')
     if config.iscolab:
-        app.queue(concurrency_count=511, max_size=1022).launch(share=True)
+        app.queue(concurrency_count=511, max_size=1022).launch(
+            share=True,
+            server_port=config.listen_port,
+            favicon_path="./assets/favicon.ico",
+        )
     else:
         app.queue(concurrency_count=511, max_size=1022).launch(
             server_name="0.0.0.0",
             inbrowser=not config.noautoopen,
             server_port=config.listen_port,
+            favicon_path="./assets/favicon.ico",
             quiet=True,
         )
