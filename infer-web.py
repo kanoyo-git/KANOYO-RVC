@@ -911,10 +911,16 @@ def change_f0_method(f0method8):
 vc_output1 = gr.Textbox(label=i18n("Console"))
 vc_output2 = gr.Audio(label=i18n("Audio output"))
 
-with gr.Blocks(title="Ilaria RVC 💖") as app:
-    gr.Markdown("<h1>  Ilaria RVC 💖   </h1>")
-    gr.Markdown(value=i18n("Made with 💖 by Ilaria | Support her on [Ko-Fi](https://ko-fi.com/ilariaowo)"))
-    gr.Markdown(i18n("For voice models and support join [AI Hub](https://discord.gg/AIHUB)"))
+with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
+    gr.HTML('''
+        <h1 style="display: flex; align-items: center;">
+                <img src="https://art.pixilart.com/sr220411b1340ff.png" alt="heart" style="width:42px;height:42px;border-radius:10%;margin-right:10px;">
+                Kanoyo WebUI
+        </h1>
+    ''')
+    gr.HTML(
+        "<h3>Лучший Telegram-канал во всей вселенной — <a href='https://t.me/kanoyotelegram'>Присоединяйся!</a></h3>"
+    )
     with gr.Tabs():
         with gr.TabItem(i18n("Inference")):
             with gr.Row():
