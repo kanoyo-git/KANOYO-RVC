@@ -945,18 +945,7 @@ with gr.Blocks(title="Ilaria RVC 💖") as app:
                                 )
                                 record_button = gr.Audio(source="microphone", label="Use your microphone",
                                                          type="filepath")
-
-                                file_index2 = gr.Dropdown(
-                                    label=i18n("Auto-detect index path"),
-                                    choices=sorted(index_paths),
-                                    interactive=True,
-                                )
-                                refresh_button.click(
-                                    fn=change_choices,
-                                    inputs=[],
-                                    outputs=[sid0, file_index2, input_audio1],
-                                    api_name="infer_refresh",
-                                )
+                                
                                 input_audio0 = gr.Dropdown(
                                     label=i18n("Select a file from the audio folder"),
                                     choices=sorted(audio_paths),
@@ -1034,6 +1023,13 @@ with gr.Blocks(title="Ilaria RVC 💖") as app:
                                         label=i18n("F0 curve file [optional]"),
                                         visible=False,
                                     )
+
+                                    refresh_button.click(
+                                        fn=change_choices,
+                                        inputs=[],
+                                        outputs=[sid0, file_index2, input_audio1],
+                                        api_name="infer_refresh",
+                                    )
                                     file_index1 = gr.Textbox(
                                         label=i18n("Path of index"),
                                         placeholder="%userprofile%\\Desktop\\models\\model_example.index",
@@ -1055,7 +1051,7 @@ with gr.Blocks(title="Ilaria RVC 💖") as app:
                                     )
                             
                                       #Otherwise everything break, to be optimized
-                            with gr.Accordion('Advanced Settings', open=True, visible=True):
+                            with gr.Accordion('Advanced Settings', open=False, visible=True):
                                 with gr.Column():
                                     f0method0 = gr.Radio(
                                         label=i18n("Pitch Extraction, rmvpe is best"),
@@ -1120,6 +1116,11 @@ with gr.Blocks(title="Ilaria RVC 💖") as app:
                                         placeholder="%userprofile%\\Desktop\\models\\model_example.index",
                                         interactive=True,
                                         visible=False,
+                                    )
+                                    file_index2 = gr.Dropdown(
+                                        label=i18n("Auto-detect index path"),
+                                        choices=sorted(index_paths),
+                                        interactive=True,
                                     )
 
                 with gr.Group():
