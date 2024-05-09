@@ -2,8 +2,10 @@ import os
 import sys
 from dotenv import load_dotenv
 import requests
+import subprocess
 import wave
 import zipfile
+from mega import Mega
 now_dir = os.getcwd()
 sys.path.append(now_dir)
 load_dotenv()
@@ -17,6 +19,7 @@ from infer.lib.train.process_ckpt import (
 )
 from i18n.i18n import I18nAuto
 from configs.config import Config
+from urllib.parse import urlencode
 from sklearn.cluster import MiniBatchKMeans
 import torch
 import numpy as np
@@ -427,9 +430,18 @@ def download_from_url(url, model):
         elif "mega.nz" in url:
             m = Mega()
             m.download_url(url, './zips')
+        elif "disk.yandex.ru" in url:
+            base_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+            public_key = url
+            final_url = base_url + urlencode(dict(public_key=public_key))
+            response = requests.get(final_url)
+            download_url = response.json()['href']
+            download_response = requests.get(download_url)
+            with open(zipfile_path, 'wb') as file:
+                file.write(download_response.content)
         else:
             response = requests.get(url)
-            response.raise_for_status()  # Raise an exception for HTTP errors
+            response.raise_for_status() 
             with open(zipfile_path, 'wb') as file:
                 file.write(response.content)
 
@@ -447,7 +459,7 @@ def download_from_url(url, model):
 
         shutil.rmtree("zips")
         shutil.rmtree("unzips")
-        return "Model downloaded, you can go back to the inference page!"
+        return i18n("Model downloaded, you can go back to the inference page!")
 
     except subprocess.CalledProcessError as e:
         return f"ERROR - Download failed (gdown): {str(e)}"
@@ -455,6 +467,7 @@ def download_from_url(url, model):
         return f"ERROR - Download failed (requests): {str(e)}"
     except Exception as e:
         return f"ERROR - The test failed: {str(e)}"
+
 
 def transfer_files(filething, dataset_dir='dataset/'):
     file_names = [f.name for f in filething]
