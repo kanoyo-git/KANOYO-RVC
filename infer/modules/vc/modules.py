@@ -139,7 +139,7 @@ class VC:
         if self.eps == 'N/A':
             epoch_str = "This is a v1 model, on some older models epochs were not used."
         else:
-            epoch_str = self.eps[:-5] if self.eps.endswith('epoch') else self.eps
+            epoch_str = self.eps[:-5] if isinstance(self.eps, str) and self.eps.endswith('epoch') else str(self.eps)
 
         fstr = f"Epochs: {epoch_str}\nSample Rate: {self.tgt_sr}\nVersion: {self.version}\nHash: {model_hash}"
         logger.info(fstr)
