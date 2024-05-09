@@ -1312,8 +1312,8 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                 exp_dir1 = gr.Textbox(label=i18n("Model Name"), value="test-model")
                 sr2 = gr.Dropdown(
                     label=i18n("Sample Rate & Pretrain"),
-                    choices=["OV2-40k", "RIN-40k", "SnowieV3.1-40k","SnowieV3.1-48k"],
-                    value="OV2-40k",
+                    choices=["OV2-40k","SnowieV3.1-40k","SnowieV3.1-48k"],
+                    value="ВЫБЕРИТЕ ПРЕТРЕЙН",
                     interactive=True,
                 )
                 version19 = gr.Radio(
