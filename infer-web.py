@@ -462,7 +462,7 @@ def transfer_files(filething, dataset_dir='dataset/'):
         filename = os.path.basename(f)
         destination = os.path.join(dataset_dir, filename)
         shutil.copyfile(f, destination)
-    return "Transferred files to dataset directory!"
+    return i18n("Transferred files to dataset directory!")
 
 def if_done_multi(done, ps):
     while 1:
@@ -949,7 +949,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                                     label=i18n("Upload Audio file"),
                                     type="filepath",
                                 )
-                                record_button = gr.Audio(source="microphone", label="Use your microphone",
+                                record_button = gr.Audio(source="microphone", label=i18n("Use your microphone"),
                                                          type="filepath")
 
                                 file_index2 = gr.Dropdown(
@@ -987,7 +987,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                                     visible=False,
                                 )
                         with gr.Column():
-                            with gr.Accordion('Advanced Settings', open=False, visible=False):
+                            with gr.Accordion("Advanced Settings", open=False, visible=False):
                                 with gr.Column():
                                     f0method0 = gr.Radio(
                                         label=i18n("Pitch Extraction, rmvpe is best"),
@@ -1061,7 +1061,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                                     )
                             
                                       #Otherwise everything break, to be optimized
-                            with gr.Accordion('Advanced Settings', open=True, visible=True):
+                            with gr.Accordion(i18n('Advanced Settings'), open=True, visible=True):
                                 with gr.Column():
                                     f0method0 = gr.Radio(
                                         label=i18n("Pitch Extraction, rmvpe is best"),
@@ -1156,22 +1156,22 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                             [vc_output1, vc_output2],
                             api_name="infer_convert",
                         )
-            with gr.TabItem("Download Voice Models"):
-                gr.Markdown(i18n("For models found in [AI Hub](https://discord.gg/AIHUB)"))
+            with gr.TabItem(i18n("Download Voice Models")):
+                gr.Markdown(i18n("For models found in AI Hub"))
                 with gr.Row():
-                    url = gr.Textbox(label="Huggingface Link:")
+                    url = gr.Textbox(label=i18n("Huggingface Link:"))
                 with gr.Row():
-                    model = gr.Textbox(label="Name of the model (without spaces):")
-                    download_button = gr.Button("Download")
+                    model = gr.Textbox(label=i18n("Name of the model (without spaces):"))
+                    download_button = gr.Button(i18n("Download"))
                 with gr.Row():
-                    status_bar = gr.Textbox(label="Download Status")
+                    status_bar = gr.Textbox(label=i18n("Download Status"))
                 download_button.click(fn=download_from_url, inputs=[url, model], outputs=[status_bar])
 
-            with gr.TabItem("Import Models"):
-             gr.Markdown(i18n("For models found on [Weights](https://weights.gg)"))
-             file_upload = gr.File(label="Upload a .zip file containing a .pth and .index file")
-             import_button = gr.Button("Import")
-             import_status = gr.Textbox(label="Import Status")
+            with gr.TabItem(i18n("Import Models")):
+             gr.Markdown(i18n("For models found on Weights"))
+             file_upload = gr.File(label=i18n("Upload a .zip file containing a .pth and .index file"))
+             import_button = gr.Button(i18n("Import"))
+             import_status = gr.Textbox(label=i18n("Import Status"))
              import_button.click(fn=import_button_click, inputs=file_upload, outputs=import_status)
 
             with gr.TabItem(i18n("Batch Inference")):
@@ -1324,10 +1324,10 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                     trainset_dir4 = gr.Textbox(
                         label=i18n("Path to Dataset"), value="dataset"
                     )
-                    with gr.Accordion('Upload Dataset (alternative)', open=False, visible=True):
-                        file_thin = gr.Files(label='Dataset') # transfers files to the dataset dir, lol # much coding -ila
-                        show = gr.Textbox(label='Status')
-                        transfer_button = gr.Button('Upload Dataset to the folder', variant="primary")
+                    with gr.Accordion(i18n('Upload Dataset (alternative)'), open=False, visible=True):
+                        file_thin = gr.Files(label=i18n('Audio Files')) # transfers files to the dataset dir, lol # much coding -ila
+                        show = gr.Textbox(label=i18n('Status'))
+                        transfer_button = gr.Button(i18n('Upload Dataset to the folder'), variant="primary")
                         transfer_button.click(
                             fn=transfer_files,
                             inputs=[file_thin],
@@ -1368,7 +1368,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                         interactive=True,
                     )
 
-            with gr.Accordion('Advanced Settings', open=False, visible=True):
+            with gr.Accordion(i18n('Advanced Settings'), open=False, visible=True):
                 with gr.Row(): 
                     with gr.Group():
                         spk_id5 = gr.Slider(
@@ -1517,35 +1517,22 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                  but4.click(train_index, [exp_dir1, version19], info)
         
         with gr.TabItem(i18n("UVR5")):
-            with gr.Group():
-                gr.Markdown(
-                    value=i18n(
-                        """
-                        - **Kim Vocal 2**: Effortlessly separates vocals and instrumentals, a perfect tool for music enthusiasts.
-                        - **Karaoke 5 HP**: Expertly isolates two overlapping voices, making it a valuable asset for duet performances.
-                        - **DeEcho DeReverb**: Skillfully eliminates reverb from vocal tracks, enhancing the clarity of your sound.
-                        - **MDX23C InstVoc**: Excellent at removing sound effects or other annoying noises, ensuring a smooth listening experience.
-                        - **DeNoise**: Exceptional at detecting and removing nearly imperceptible noises that can compromise the quality of a cover or a model.
-                        """
-                    )
-                )
-
                 with gr.Group():
                     uvr_handler = UVRHANDLER()
                     with gr.Row():
                         audios = gr.File()
-                        output_dir = gr.Textbox('opt/', label='Output Directory')
-                        model_name = gr.Dropdown(choices=uvr5_names, label='Models')
-                        model_status = gr.Textbox(placeholder='Waiting...', interactive=False, label='Model Information')
+                        output_dir = gr.Textbox('opt/', label=i18n('Output Directory'))
+                        model_name = gr.Dropdown(choices=uvr5_names, label=i18n('Models'))
+                        model_status = gr.Textbox(placeholder='Waiting...', interactive=False, label=i18n('Model Information'))
                     
                     with gr.Row():
-                        LOADMODELBUTTON = gr.Button('Load Model', variant="primary")
+                        LOADMODELBUTTON = gr.Button(i18n('Load Model'), variant="primary")
                         LOADMODELBUTTON.click(
                             fn=uvr_handler.loadmodel,
                             inputs=[model_name, output_dir],
                             outputs=[model_status]
                         )
-                        CLEARMODELBUTTON = gr.Button('Unload Model', variant="primary")
+                        CLEARMODELBUTTON = gr.Button(i18n('Unload Model'), variant="primary")
                         CLEARMODELBUTTON.click(
                             fn=uvr_handler.deloadmodel,
                             outputs=[model_status]
@@ -1554,9 +1541,9 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                     with gr.Group():
                         with gr.Column():
                             with gr.Row():
-                                inst = gr.Audio(show_download_button=True, interactive=False, label='Instrumental')
-                                vocal = gr.Audio(show_download_button=True, interactive=False, label='Vocals')
-                            UVRBUTTON = gr.Button('Extract', variant="primary")
+                                inst = gr.Audio(show_download_button=True, interactive=False, label=i18n('Instrumental'))
+                                vocal = gr.Audio(show_download_button=True, interactive=False, label=i18n('Vocals'))
+                            UVRBUTTON = gr.Button(i18n('Extract'), variant="primary")
                             UVRBUTTON.click(
                                 fn=uvr_handler.uvr,
                                 inputs=[audios],
@@ -1566,9 +1553,9 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
         with gr.TabItem(i18n("Extra")):
                 with gr.Accordion('IlariaTTS', open=False):
                     with gr.Column():
-                        ilariaid=gr.Dropdown(label="Voice:", choices=ilariavoices, interactive=True, value="English-Jenny (Female)")
-                        ilariatext = gr.Textbox(label="Input your Text", interactive=True, value="This is a test.")   
-                        ilariatts_button = gr.Button(value="Speak and Convert")
+                        ilariaid=gr.Dropdown(label=i18n("TTS Voice:"), choices=ilariavoices, interactive=True, value="English-Jenny (Female)")
+                        ilariatext = gr.Textbox(label=i18n("Input your Text"), interactive=True, value="Ывывавы, это тест.")   
+                        ilariatts_button = gr.Button(value=i18n("Speak and Convert"))
                         ilariatts_button.click(tts_and_convert,
                                                 [ilariaid,
                                                 ilariatext,
@@ -1585,7 +1572,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                                                 protect0]
                                               , [vc_output1, vc_output2]
                                               )
-                with gr.Accordion('Model Info', open=False):
+                with gr.Accordion(i18n('Model Info'), open=False):
                     with gr.Column():
                         sid1 = gr.Dropdown(label=i18n("Voice Model"), choices=sorted(names))
                         refresh_button = gr.Button(i18n("Refresh"), variant="primary")
@@ -1595,7 +1582,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                             outputs=[sid1, file_index2],
                             api_name="infer_refresh",
                             )
-                        modelload_out = gr.Textbox(label="Model Metadata", interactive=False, lines=4)
+                        modelload_out = gr.Textbox(label=i18n("Model Metadata"), interactive=False, lines=4)
                         get_model_info_button = gr.Button(i18n("Get Model Info"))
                         get_model_info_button.click(
                          fn=vc.get_vc, 
@@ -1603,7 +1590,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                          outputs=[spk_item, protect0, protect1, file_index2, file_index4, modelload_out]
                         )
                         
-                with gr.Accordion('Audio Analyser', open=False):
+                with gr.Accordion(i18n('Audio Analyser'), open=False):
                     with gr.Column():
                         audio_input = gr.Audio(type="filepath")
                         get_info_button = gr.Button(
@@ -1628,24 +1615,24 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                         outputs=[output_markdown, image_output],
                     )
 
-                with gr.Accordion('Training Helper', open=False):
+                with gr.Accordion(i18n('Training Helper'), open=False):
                     with gr.Column():
-                         audio_input = gr.Audio(type="filepath", label="Upload your audio file")
-                         gr.Text("Please note that these results are approximate and intended to provide a general idea for beginners.", label='Notice:')
-                         training_info_output = gr.Markdown(label="Training Information:")
-                         get_info_button = gr.Button("Get Training Info")
+                         audio_input = gr.Audio(type="filepath", label=i18n("Upload your audio file"))
+                         gr.Text(i18n("Please note that these results are approximate and intended to provide a general idea for beginners."), label=i18n('Notice:'))
+                         training_info_output = gr.Markdown(label=i18n("Training Information:"))
+                         get_info_button = gr.Button(i18n("Get Training Info"))
                          get_info_button.click(
                           fn=on_button_click,
                           inputs=[audio_input],
                           outputs=[training_info_output]
                         )
                          
-                with gr.Accordion('Training Time Calculator', open=False):
+                with gr.Accordion(i18n('Training Time Calculator'), open=False):
                     with gr.Column():
-                        epochs_input = gr.Number(label="Number of Epochs")
-                        seconds_input = gr.Number(label="Seconds per Epoch")
-                        calculate_button = gr.Button("Calculate Time Remaining")
-                        remaining_time_output = gr.Textbox(label="Remaining Time", interactive=False)
+                        epochs_input = gr.Number(label=i18n("Number of Epochs"))
+                        seconds_input = gr.Number(label=i18n("Seconds per Epoch"))
+                        calculate_button = gr.Button(i18n("Calculate Time Remaining"))
+                        remaining_time_output = gr.Textbox(label=i18n("Remaining Time"), interactive=False)
                         
                         calculate_button.click(
                             fn=calculate_remaining_time,
@@ -1723,7 +1710,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                             api_name="ckpt_merge",
                         )
 
-                with gr.Accordion('Credits', open=False):
+                with gr.Accordion(i18n('Credits'), open=False):
                     gr.Markdown('''
                 ## All the amazing people who worked on this!
                 
@@ -1779,7 +1766,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
                 )      
         with gr.TabItem(i18n("")):
             gr.Markdown('''
-                ![ilaria](https://i.ytimg.com/vi/5PWqt2Wg-us/maxresdefault.jpg)
+                ![arbuz](https://cdn-lfs-us-1.huggingface.co/repos/61/7a/617a4e71eb3a363c7795a9edd65388c15dd1c6e5239ddd68304b96da935b819d/9b724125fabbc1eb055e16033a0571c4da486e5c6f11785afdb6dfbb1f0346ea?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27arbuz.png%3B+filename%3D%22arbuz.png%22%3B&response-content-type=image%2Fpng&Expires=1715533997&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcxNTUzMzk5N319LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy11cy0xLmh1Z2dpbmdmYWNlLmNvL3JlcG9zLzYxLzdhLzYxN2E0ZTcxZWIzYTM2M2M3Nzk1YTllZGQ2NTM4OGMxNWRkMWM2ZTUyMzlkZGQ2ODMwNGI5NmRhOTM1YjgxOWQvOWI3MjQxMjVmYWJiYzFlYjA1NWUxNjAzM2EwNTcxYzRkYTQ4NmU1YzZmMTE3ODVhZmRiNmRmYmIxZjAzNDZlYT9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPSomcmVzcG9uc2UtY29udGVudC10eXBlPSoifV19&Signature=hAXARaTl1B7RT0rQCDT7VUQAWB7sKDpk1dr5b5K8Kcs7GbO8WNWZf4hfUasPgLg6~VktTkE6StqgHQO4Aeg5Zv7-seJ9e1rqyrodSHD5Ckjjl~5GRzIRv6uNjHSH1Gt-kupARsfVhq0as0bnpq7K8XBDE7awZLOg~Ikr-9FL6GJQUSD9sMEEr--ar19a1y5v5KC5fe~IIDJB6kfYBBcVQmuARfYtHW6nPPEgiRnhENpjfaZRTjNcO1nQ4Ixw5t4mnm4EINbgMTELVf6laN89mN1BEWU812gKOM45lC4A6sxjhyHo0c-IbwYe5wtklIcJOgun4t4-7cndiLipKwFB5A__&Key-Pair-Id=KCD77M1F0VK2B)
             ''')
     if config.iscolab:
         app.queue(concurrency_count=511, max_size=1022).launch(

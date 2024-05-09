@@ -12,11 +12,11 @@ def load_language_list(language):
 class I18nAuto:
     def __init__(self, language=None):
         if language in ["Auto", None]:
-            language = locale.getdefaultlocale()[
+            language = 'ru_RU'[
                 0
             ]  # getlocale can't identify the system's language ((None, None))
         if not os.path.exists(f"./i18n/locale/{language}.json"):
-            language = "en_US"
+            language = "ru_RU"
         self.language = language
         self.language_map = load_language_list(language)
 
