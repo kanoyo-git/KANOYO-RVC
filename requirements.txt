@@ -51,3 +51,5 @@ audio-separator
 audio-separator[gpu]
 ffmpy==0.3.1
 librosa
+gdown
+mega.py
