@@ -952,7 +952,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
         </h1>
     ''')
     gr.HTML(
-        "<h3>Лучший Telegram-канал во всей вселенной — <a href='https://t.me/kanoyotelegram'>Присоединяйся!</a></h3>"
+        "<h3>Самая базированная база 👻</h3>"
     )
     with gr.Tabs():
         with gr.TabItem(i18n("Inference")):
