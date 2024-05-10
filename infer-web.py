@@ -948,7 +948,7 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
     gr.HTML('''
         <h1 style="display: flex; align-items: center;">
                 <img src="https://art.pixilart.com/sr220411b1340ff.png" alt="heart" style="width:42px;height:42px;border-radius:10%;margin-right:10px;">
-                Kanoyo WebUI
+                Kanoyo
         </h1>
     ''')
     gr.HTML(
