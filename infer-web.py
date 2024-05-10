@@ -921,10 +921,30 @@ def change_f0_method(f0method8):
         visible = False
     return {"visible": visible, "__type__": "update"}
 
+css = """
+.primary.svelte-1jrzxu {
+  background: linear-gradient(270deg, blue, darkcyan);
+  background-size: 200% 200%;
+  color: white;
+  will-change: background;
+}
+
+.primary.svelte-1jrzxu:hover {
+  animation: Gradient 4s linear infinite;
+  background: linear-gradient(270deg, darkcyan, blue);
+}
+
+@keyframes Gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+"""
+
 vc_output1 = gr.Textbox(label=i18n("Console"))
 vc_output2 = gr.Audio(label=i18n("Audio output"))
 
-with gr.Blocks(theme='gradio/base', title="Kanoyo") as app:
+with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
     gr.HTML('''
         <h1 style="display: flex; align-items: center;">
                 <img src="https://art.pixilart.com/sr220411b1340ff.png" alt="heart" style="width:42px;height:42px;border-radius:10%;margin-right:10px;">
