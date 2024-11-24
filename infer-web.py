@@ -91,14 +91,7 @@ uvr5_names = [
     'UVR-DeEcho-DeReverb.pth',
     'UVR-Denoise',
 ]
-if config.dml:
-    def forward_dml(ctx, x, scale):
-        ctx.scale = scale
-        res = x.clone().detach()
-        return res
 
-
-    fairseq.modules.grad_multiply.GradMultiply.forward = forward_dml
 i18n = I18nAuto()
 logger.info(i18n)
 ngpu = torch.cuda.device_count()
@@ -151,15 +144,6 @@ else:
     default_batch_size = 1
 gpus = "-".join([i[0] for i in gpu_infos])
 
-
-class ToolButton(gr.Button, gr.components.FormComponent):
-
-    def __init__(self, **kwargs):
-        super().__init__(variant="tool", **kwargs)
-
-    def get_block_name(self):
-        return "button"
-
 weight_root = os.getenv("weight_root")
 index_root = os.getenv("index_root")
 audio_root = "audios"
@@ -176,10 +160,14 @@ indexes_list = [os.path.join(root, name)
                for root, _, files in os.walk(index_root, topdown=False) 
                for name in files 
                if name.endswith(".index") and "trained" not in name]
-audio_paths  = [os.path.join(root, name)
+
+audio_paths = [os.path.join(root, name)
                for root, _, files in os.walk(audio_root, topdown=False) 
                for name in files
                if name.endswith(tuple(sup_audioext))]
+
+audio_paths = [str(path) for path in audio_paths]
+
 def get_pretrained_files(directory, keyword, filter_str):
     file_paths = {}
     for filename in os.listdir(directory):
@@ -963,12 +951,12 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                 with gr.Column():
                     refresh_button = gr.Button(i18n("Refresh"), variant="primary")
                     clean_button = gr.Button(i18n("Unload Voice from VRAM"), variant="primary")
-                vc_transform0 = gr.inputs.Slider(
+                vc_transform0 = gr.Slider(
                                 label=i18n(
                                     "Pitch: -24 is lower (2 octaves) and 24 is higher (2 octaves)"),
                                 minimum=-24,
                                 maximum=24,
-                                default=0,
+                                value=0,
                                 step=1,
                 )
                 clean_button.click(
@@ -982,9 +970,6 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                                     label=i18n("Upload Audio file"),
                                     type="filepath",
                                 )
-                                record_button = gr.Audio(source="microphone", label=i18n("Use your microphone"),
-                                                         type="filepath")
-
                                 file_index2 = gr.Dropdown(
                                     label=i18n("Auto-detect index path"),
                                     choices=sorted(index_paths),
@@ -1002,20 +987,9 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                                     value='',
                                     interactive=True,
                                 )
-                                record_button.change(
-                                    fn=lambda x: x,
-                                    inputs=[record_button],
-                                    outputs=[input_audio0],
-                                )
                                 file_index1 = gr.Textbox(
                                     label=i18n("Path of index"),
                                     placeholder=".\models\index",
-                                    interactive=True,
-                                    visible=False,
-                                )
-                                file_index2 = gr.Textbox(
-                                    label=i18n("Auto-detect index path"),
-                                    choices=sorted(index_paths),
                                     interactive=True,
                                     visible=False,
                                 )
@@ -1220,8 +1194,8 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                         )
                         opt_input = gr.Textbox(label=i18n("Output"), value="InferOutput")
                         file_index3 = gr.Textbox(
-                            label=i18n("Path to index"),
-                            value="",
+                            label=i18n("Path of index"),
+                            placeholder="%userprofile%\\Desktop\\models\\model_example.index",
                             interactive=True,
                         )
                         file_index4 = gr.Dropdown(
@@ -1468,14 +1442,14 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                             )        
 
             with gr.Row():
-                pretrained_G14 = gr.Textbox(
+                pretrained_G14 = gr.Dropdown(
                     label="Pretrained G",
                     choices=list(pretrained_G_files.values()),
                     value=pretrained_G_files.get('f0G32.pth', ''),
                     visible=False,
                     interactive=True,
                 )
-                pretrained_D15 = gr.Textbox(
+                pretrained_D15 = gr.Dropdown(
                     label="Pretrained D",
                     choices=list(pretrained_D_files.values()),
                     value=pretrained_D_files.get('f0D32.pth', ''),
@@ -1802,13 +1776,13 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                 ![arbuz](https://cdn-lfs-us-1.huggingface.co/repos/61/7a/617a4e71eb3a363c7795a9edd65388c15dd1c6e5239ddd68304b96da935b819d/9b724125fabbc1eb055e16033a0571c4da486e5c6f11785afdb6dfbb1f0346ea?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27arbuz.png%3B+filename%3D%22arbuz.png%22%3B&response-content-type=image%2Fpng&Expires=1715533997&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcxNTUzMzk5N319LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy11cy0xLmh1Z2dpbmdmYWNlLmNvL3JlcG9zLzYxLzdhLzYxN2E0ZTcxZWIzYTM2M2M3Nzk1YTllZGQ2NTM4OGMxNWRkMWM2ZTUyMzlkZGQ2ODMwNGI5NmRhOTM1YjgxOWQvOWI3MjQxMjVmYWJiYzFlYjA1NWUxNjAzM2EwNTcxYzRkYTQ4NmU1YzZmMTE3ODVhZmRiNmRmYmIxZjAzNDZlYT9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPSomcmVzcG9uc2UtY29udGVudC10eXBlPSoifV19&Signature=hAXARaTl1B7RT0rQCDT7VUQAWB7sKDpk1dr5b5K8Kcs7GbO8WNWZf4hfUasPgLg6~VktTkE6StqgHQO4Aeg5Zv7-seJ9e1rqyrodSHD5Ckjjl~5GRzIRv6uNjHSH1Gt-kupARsfVhq0as0bnpq7K8XBDE7awZLOg~Ikr-9FL6GJQUSD9sMEEr--ar19a1y5v5KC5fe~IIDJB6kfYBBcVQmuARfYtHW6nPPEgiRnhENpjfaZRTjNcO1nQ4Ixw5t4mnm4EINbgMTELVf6laN89mN1BEWU812gKOM45lC4A6sxjhyHo0c-IbwYe5wtklIcJOgun4t4-7cndiLipKwFB5A__&Key-Pair-Id=KCD77M1F0VK2B)
             ''')
     if config.iscolab:
-        app.queue(concurrency_count=511, max_size=1022).launch(
+        app.launch(
             share=True,
             server_port=config.listen_port,
             favicon_path="./assets/favicon.ico",
         )
     else:
-        app.queue(concurrency_count=511, max_size=1022).launch(
+        app.launch(
             server_name="0.0.0.0",
             inbrowser=not config.noautoopen,
             server_port=config.listen_port,
