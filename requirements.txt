@@ -50,6 +50,6 @@ ffmpy==0.3.1
 librosa
 gdown
 mega.py
-fastapi==0.88.0
-gradio==4.42.0
-pydantic==1.10.0
+fastapi
+gradio==4.43.0
+pydantic
