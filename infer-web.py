@@ -235,7 +235,6 @@ def generate_spectrogram_and_get_info(audio_file):
 
     return info_table, "spectrogram.png"
 
-
 def change_choices():
     names = []
     for name in os.listdir(weight_root):
@@ -246,13 +245,15 @@ def change_choices():
         for name in files:
             if name.endswith(".index") and "trained" not in name:
                 index_paths.append("%s/%s" % (root, name))
-    audios = [os.path.join(audio_root, file) for file in os.listdir(os.path.join(now_dir, "audios"))]
+    audio_paths = [os.path.join(audio_root, file) for file in os.listdir(os.path.join(now_dir, "audios"))]
 
-    return {"choices": sorted(names), "__type__": "update"}, {"choices": sorted(index_paths),"__type__": "update"},{
-        "choices": sorted(audios), "__type__": "update"
+    return {
+        "choices": sorted(names), "__type__": "update"
+    }, {
+        "choices": sorted(index_paths), "__type__": "update"
+    }, {
+        "choices": sorted(audio_paths), "__type__": "update"
     }
-
-
 
 # Define the tts_and_convert function
 def tts_and_convert(ttsvoice, text, spk_item, vc_transform, f0_file, f0method, file_index1, file_index2, index_rate, filter_radius, resample_sr, rms_mix_rate, protect):
@@ -975,17 +976,17 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                                     choices=sorted(index_paths),
                                     interactive=True,
                                 )
-                                refresh_button.click(
-                                    fn=change_choices,
-                                    inputs=[],
-                                    outputs=[sid0, file_index2, input_audio1],
-                                    api_name="infer_refresh",
-                                )
                                 input_audio0 = gr.Dropdown(
                                     label=i18n("Select a file from the audio folder"),
                                     choices=sorted(audio_paths),
                                     value='',
                                     interactive=True,
+                                )
+                                refresh_button.click(
+                                    fn=change_choices,
+                                    inputs=[],
+                                    outputs=[sid0, file_index2, input_audio0],
+                                    api_name="infer_refresh",
                                 )
                                 file_index1 = gr.Textbox(
                                     label=i18n("Path of index"),

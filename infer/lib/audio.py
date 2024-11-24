@@ -38,12 +38,15 @@ def audio2(i, o, format, sr):
     if format == "f32le":
         format = "pcm_f32le"
 
-    ostream = out.add_stream(format, channels=1)
-    ostream.sample_rate = sr
+    # Устанавливаем параметры до создания потока
+    ostream = out.add_stream(format, rate=sr, channels=1)
 
     for frame in inp.decode(audio=0):
         for p in ostream.encode(frame):
             out.mux(p)
+
+    for p in ostream.encode(None):
+        out.mux(p)
 
     out.close()
     inp.close()
@@ -63,11 +66,9 @@ def load_audio(file, sr):
                 audio2(f, out, "f32le", sr)
                 return np.frombuffer(out.getvalue(), np.float32).flatten()
 
-    except AttributeError:
-        audio = file[1] / 32768.0
+    except Exception as e:
+        # Загружаем аудио с помощью librosa
+        audio, _ = librosa.load(file, sr=sr)
         if len(audio.shape) == 2:
-            audio = np.mean(audio, -1)
-        return librosa.resample(audio, orig_sr=file[0], target_sr=16000)
-
-    except:
-        raise RuntimeError(traceback.format_exc())
+            audio = np.mean(audio, axis=1)
+        return audio
