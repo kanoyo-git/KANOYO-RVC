@@ -6,9 +6,7 @@ librosa==0.9.1
 llvmlite==0.39.0
 fairseq==0.12.2
 faiss-cpu==1.7.3
-gradio==4.43.0
 Cython
-pydub>=0.25.1
 soundfile>=0.12.1
 ffmpeg-python>=0.2.0
 tensorboardX
@@ -42,7 +40,6 @@ onnxruntime; sys_platform == 'darwin'
 onnxruntime-gpu; sys_platform != 'darwin'
 onnxscript
 torchcrepe==0.0.20
-fastapi==0.88
 python-dotenv>=1.0.0
 av
 edge-tts
@@ -54,3 +51,6 @@ ffmpy==0.3.1
 librosa
 gdown
 mega.py
+fastapi==0.88.0
+gradio==4.42.0
+pydantic==1.10.0
