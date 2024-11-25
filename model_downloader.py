@@ -1,6 +1,6 @@
 import os
 import subprocess
-import platform
+import argparse
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,9 @@ folder_mapping = {
 
 def download_with_aria2(url, destination_path):
     """Скачивание файла с помощью aria2."""
+    if os.path.exists(destination_path):
+        print(f"Файл {destination_path} уже существует. Пропуск.")
+        return
     aria2c_cmd = [
         "aria2c",
         "--file-allocation=none",
@@ -52,23 +55,42 @@ def download_with_aria2(url, destination_path):
     print(f"Скачивание {url} в {destination_path}...")
     subprocess.run(aria2c_cmd, check=True)
 
-# Скачивание моделей
-for remote_folder, file_list in models_download:
-    local_folder = folder_mapping.get(remote_folder, "")
-    os.makedirs(local_folder, exist_ok=True)
-    for file in file_list:
-        destination_path = os.path.join(local_folder, file)
-        url = f"{URL_BASE}/{remote_folder}{file}"
-        if not os.path.exists(destination_path):
+def download_files(file_list, folder_mapping, url_base):
+    for remote_folder, file_list in file_list:
+        local_folder = folder_mapping.get(remote_folder, "")
+        os.makedirs(local_folder, exist_ok=True)
+        for file in file_list:
+            destination_path = os.path.join(local_folder, file)
+            url = f"{url_base}/{remote_folder}{file}"
             download_with_aria2(url, destination_path)
 
-# Скачивание индивидуальных файлов
-for file_name, local_folder in individual_files:
-    os.makedirs(local_folder, exist_ok=True)
-    destination_path = os.path.join(local_folder, file_name)
-    url = f"{URL_BASE}/{file_name}"
-    if not os.path.exists(destination_path):
-        download_with_aria2(url, destination_path)
+def main():
+    parser = argparse.ArgumentParser(description="Скачивание моделей и ресурсов.")
+    parser.add_argument(
+        "-train",
+        action="store_true",
+        help="Скачивать претрейны вместе с главными файлами.",
+    )
+    args = parser.parse_args()
 
-os.system("cls" if os.name == "nt" else "clear")
-logger.info("Загрузка завершена успешно.")
+    if args.train:
+        print("Режим тренировки включен. Скачиваются претрейны...")
+        download_files(models_download, folder_mapping, URL_BASE)
+        for file_name, local_folder in individual_files:
+            os.makedirs(local_folder, exist_ok=True)
+            destination_path = os.path.join(local_folder, file_name)
+            url = f"{URL_BASE}/{file_name}"
+            download_with_aria2(url, destination_path)
+    else:
+        print("Режим без тренировки. Скачиваются только главные файлы...")
+        for file_name, local_folder in individual_files:
+            os.makedirs(local_folder, exist_ok=True)
+            destination_path = os.path.join(local_folder, file_name)
+            url = f"{URL_BASE}/{file_name}"
+            download_with_aria2(url, destination_path)
+
+    print("Загрузка завершена.")
+    logger.info("Скачивание завершено.")
+
+if __name__ == "__main__":
+    main()
