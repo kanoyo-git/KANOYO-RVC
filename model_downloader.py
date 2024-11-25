@@ -89,7 +89,6 @@ def main():
             url = f"{URL_BASE}/{file_name}"
             download_with_aria2(url, destination_path)
 
-    print("Загрузка завершена.")
     logger.info("Скачивание завершено.")
 
 if __name__ == "__main__":
