@@ -343,7 +343,9 @@ def clean():
 
 
 sr_dict = {
-    "32k": 32000, "40k": 40000, "48k": 48000, "OV2-32k": 32000, "OV2-40k": 40000, "RIN-40k": 40000, "Snowie-40k": 40000, "Snowie-48k": 48000, "SnowieV3.1-40k": 40000, "SnowieV3.1-32k": 32000, "SnowieV3.1-48k": 48000, "SnowieV3.1-RinE3-40K": 40000, "Italia-32k": 32000,
+    "32k": 32000,
+    "40k": 40000,
+    "48k": 48000,
 }
 
 def durations(sample_rate, model_options, qualities, duration):
@@ -658,9 +660,9 @@ def change_version19(sr2, if_f0_3, version19):
     if sr2 == "32k" and version19 == "v1":
         sr2 = "40k"
     to_return_sr2 = (
-        {"choices": ["32k","40k", "48k"], "__type__": "update", "value": sr2}
+        {"choices": ["40k", "48k"], "__type__": "update", "value": sr2}
         if version19 == "v1"
-        else {"choices": ["32k", "40k", "48k", "OV2-32k", "OV2-40k", "RIN-40k","Snowie-40k","Snowie-48k","Italia-32k"], "__type__": "update", "value": sr2}
+        else {"choices": ["40k", "48k", "32k"], "__type__": "update", "value": sr2}
     )
     f0_str = "f0" if if_f0_3 else ""
     return (
@@ -911,19 +913,42 @@ def change_f0_method(f0method8):
     return {"visible": visible, "__type__": "update"}
 
 css = """
-.primary.svelte-1jrzxu {
-  background: linear-gradient(270deg, blue, darkcyan);
+.primary.svelte-cmf5ev {
+  background: linear-gradient(135deg, #0077ff, #00d4ff);
   background-size: 200% 200%;
   color: white;
-  will-change: background;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.4s ease;
+  will-change: transform, background, box-shadow;
 }
 
-.primary.svelte-1jrzxu:hover {
-  animation: Gradient 4s linear infinite;
-  background: linear-gradient(270deg, darkcyan, blue);
+.primary.svelte-cmf5ev:hover {
+  animation: Glow 3s ease-in-out infinite, BackgroundWave 6s ease-in-out infinite;
+  background-position: 100% 0%;
+  transform: translateY(-3px); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
 
-@keyframes Gradient {
+.primary.svelte-cmf5ev:active {
+  transform: translateY(0); 
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes Glow {
+  0%, 100% {
+    box-shadow: 0 10px 20px rgba(0, 0, 255, 0.3), 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 15px 30px rgba(0, 0, 255, 0.4), 0 0 25px rgba(0, 212, 255, 0.6);
+  }
+}
+
+@keyframes BackgroundWave {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
@@ -1305,10 +1330,22 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
             gr.Markdown(value=i18n(""))
             with gr.Row():
                 exp_dir1 = gr.Textbox(label=i18n("Model Name"), value="test-model")
-                sr2 = gr.Dropdown(
-                    label=i18n("Sample Rate & Pretrain"),
-                    choices=["OV2-40k","SnowieV3.1-40k","SnowieV3.1-48k"],
-                    value="ВЫБЕРИТЕ ПРЕТРЕЙН",
+                pretrained_G14 = gr.Dropdown(
+                    label="Pretrained G",
+                    choices=list(pretrained_G_files.values()),
+                    value=pretrained_G_files.get('f0G32.pth', ''),
+                    interactive=True,
+                )
+                pretrained_D15 = gr.Dropdown(
+                    label="Pretrained D",
+                    choices=list(pretrained_D_files.values()),
+                    value=pretrained_D_files.get('f0D32.pth', ''),
+                    interactive=True,
+                )
+                sr2 = gr.Radio(
+                    label=i18n("Sample Rate"),
+                    choices=["40k", "48k"],
+                    value="40k",
                     interactive=True,
                 )
                 version19 = gr.Radio(
@@ -1443,20 +1480,6 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                             )        
 
             with gr.Row():
-                pretrained_G14 = gr.Dropdown(
-                    label="Pretrained G",
-                    choices=list(pretrained_G_files.values()),
-                    value=pretrained_G_files.get('f0G32.pth', ''),
-                    visible=False,
-                    interactive=True,
-                )
-                pretrained_D15 = gr.Dropdown(
-                    label="Pretrained D",
-                    choices=list(pretrained_D_files.values()),
-                    value=pretrained_D_files.get('f0D32.pth', ''),
-                    visible=False,
-                    interactive=True,
-                )
                 sr2.change(
                     change_sr2,
                     [sr2, if_f0_3, version19],
