@@ -45,7 +45,7 @@ def download_with_aria2(url, destination_path):
         "--max-connection-per-server=16",
         "--split=16",
         "--min-split-size=1M",
-        "--quiet=false",
+        "--quiet=true", 
         "--dir",
         os.path.dirname(destination_path),
         "--out",
@@ -53,7 +53,8 @@ def download_with_aria2(url, destination_path):
         url,
     ]
     print(f"Скачивание {url} в {destination_path}...")
-    subprocess.run(aria2c_cmd, check=True)
+    with open(os.devnull, 'w') as devnull:
+        subprocess.run(aria2c_cmd, check=True, stdout=devnull, stderr=subprocess.STDOUT)
 
 def download_files(file_list, folder_mapping, url_base):
     for remote_folder, file_list in file_list:
