@@ -168,17 +168,26 @@ audio_paths = [os.path.join(root, name)
 
 audio_paths = [str(path) for path in audio_paths]
 
-def get_pretrained_files(directory, keyword, filter_str):
+def get_pretrained_files(directory, keyword, filter_str=None):
     file_paths = {}
     for filename in os.listdir(directory):
-        if filename.endswith(".pth") and keyword in filename and filter_str in filename:
-            file_paths[filename] = os.path.join(directory, filename)
+        if filename.endswith(".pth"):
+            if filter_str is None:
+                if keyword in filename:
+                    file_paths[filename] = os.path.join(directory, filename)
+            else:
+                if keyword in filename and filter_str in filename:
+                    file_paths[filename] = os.path.join(directory, filename)
     return file_paths
 
 pretrained_directory = "assets/pretrained_v2"
 pretrained_path = {filename: os.path.join(pretrained_directory, filename) for filename in os.listdir(pretrained_directory)}
-pretrained_G_files = get_pretrained_files(pretrained_directory, "G", "f0")
-pretrained_D_files = get_pretrained_files(pretrained_directory, "D", "f0")
+
+pretrained_G_files = get_pretrained_files(pretrained_directory, "G_")
+pretrained_D_files = get_pretrained_files(pretrained_directory, "D_")
+
+pretrained_G_files.update(get_pretrained_files(pretrained_directory, "G", "f0"))
+pretrained_D_files.update(get_pretrained_files(pretrained_directory, "D", "f0"))
 
 def get_pretrained_models(path_str, f0_str, sr2):
     sr_mapping = pretrain_helper.get_pretrained_models(f0_str)

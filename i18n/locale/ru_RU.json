@@ -38,7 +38,7 @@
     "Advanced Settings": "Дополнительные настройки",
     "Train": "Обучение модели",
     "Extra": "Полезное",
-    "Model Name": "Имя Модели",
+    "Model Name": "Имя модели",
     "Path to Dataset": "Путь к датасету",
     "Pretrained G": "Претрейн G",
     "Pretrained D": "Претрейн D",
