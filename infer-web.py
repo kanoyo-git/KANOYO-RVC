@@ -1340,15 +1340,15 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
             with gr.Row():
                 exp_dir1 = gr.Textbox(label=i18n("Model Name"), value="test-model")
                 pretrained_G14 = gr.Dropdown(
-                    label="Pretrained G",
+                    label=i18n("Pretrained G"),
                     choices=list(pretrained_G_files.values()),
-                    value=pretrained_G_files.get('f0G32.pth', ''),
+                    value=pretrained_G_files.get(''),
                     interactive=True,
                 )
                 pretrained_D15 = gr.Dropdown(
-                    label="Pretrained D",
+                    label=i18n("Pretrained D"),
                     choices=list(pretrained_D_files.values()),
-                    value=pretrained_D_files.get('f0D32.pth', ''),
+                    value=pretrained_D_files.get(''),
                     interactive=True,
                 )
                 sr2 = gr.Radio(
