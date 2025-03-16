@@ -5,9 +5,8 @@
   ![KANOYO-RVC](./docs/kanoyo-rvc-banner.png)
 
   [![GitHub](https://img.shields.io/badge/GitHub-Source%20Code-181717?style=for-the-badge&logo=github)](https://github.com/KANOYO-RVC/KANOYO-RVC)
-  [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289DA?style=for-the-badge&logo=discord)](https://discord.gg/your-server)
-  [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-ff9ce3?style=for-the-badge)](https://huggingface.co/spaces/your-space)
-  [![Colab](https://img.shields.io/badge/Google%20Colab-Run%20Online-F9AB00?style=for-the-badge&logo=googlecolab)](https://colab.research.google.com/your-colab)
+  [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-ff9ce3?style=for-the-badge)](https://huggingface.co/)
+  [![Colab](https://img.shields.io/badge/Google%20Colab-Run%20Online-F9AB00?style=for-the-badge&logo=googlecolab)](https://colab.research.google.com/)
 
 </div>
 
@@ -35,7 +34,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/KANOYO-RVC.git
+git clone https://github.com/kanoyo-git/KANOYO-RVC.git
 
 # Navigate to the project directory
 cd KANOYO-RVC
