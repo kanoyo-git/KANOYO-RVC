@@ -1,6 +1,7 @@
 import traceback
 import logging
 import tempfile
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +98,16 @@ class VC:
                 "",
                 "",
             )
-        person = sid
+        # Проверяем, является ли sid полным путем к файлу или только именем файла
+        weight_root = os.getenv("weight_root")
+        if os.path.exists(sid):
+            person = sid  # используем как есть, если это полный путь
+        elif os.path.exists(os.path.join(weight_root, sid)):
+            person = os.path.join(weight_root, sid)  # добавляем путь к папке weight_root
+        else:
+            # Если ни один из предыдущих вариантов не подходит, предполагаем что sid это просто имя файла
+            person = os.path.join(weight_root, sid)
+            
         logger.info(f"Loading: {person}")
 
         self.cpt = torch.load(person, map_location="cpu")
