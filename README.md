@@ -1,117 +1,130 @@
-![Ilaria AI Suite](./docs/ilariarvcmainline.png)
-***
-[![Static Badge](https://img.shields.io/badge/GitHub-Source%20Code-s?logo=GitHub)]([https://github.com/TheStingerX/Ilaria-RVC](https://github.com/TheStingerX/Ilaria-RVC-Mainline)) [![Static Badge](https://img.shields.io/badge/AI%20Hub-Discord%20Server-s?logo=Discord&color=%09%237289da)](https://discord.gg/aihub) [![Static Badge](https://img.shields.io/badge/Ko--Fi-s?logo=Ko-Fi&label=Support%20me%20on&labelColor=434b57&color=FF5E5B)](https://ko-fi.com/ilariaowo) [![Static Badge](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-s?labelColor=YELLOW&color=FFEA00)](https://huggingface.co/spaces/TheStinger/Ilaria_RVC_Mainline) [![Static Badge](https://img.shields.io/badge/Colab-s?logo=googlecolab&label=Google&color=FFA500)](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)
+# 🎵 KANOYO-RVC 🎵
 
-***
-<p align="center">
-  <h1>Ilaria RVC Mainline 💖</h1>
-</p>
-
-🎉 Welcome to Ilaria RVC Mainline! 🎉  
+<div align="center">
   
-This project leverages various libraries and modules to create a Graphical User Interface (GUI) for voice conversion.
-Currently the fastest and easiest way to experience RVC!  
-It's primarily designed for local users. 🖥️   
+  ![KANOYO-RVC](./docs/kanoyo-rvc-banner.png)
 
-Ilaria RVC is part of the Ilaria AI Suite wich includes various easy and powerful tools. 💖
+  [![GitHub](https://img.shields.io/badge/GitHub-Source%20Code-181717?style=for-the-badge&logo=github)](https://github.com/KANOYO-RVC/KANOYO-RVC)
+  [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289DA?style=for-the-badge&logo=discord)](https://discord.gg/your-server)
+  [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-ff9ce3?style=for-the-badge)](https://huggingface.co/spaces/your-space)
+  [![Colab](https://img.shields.io/badge/Google%20Colab-Run%20Online-F9AB00?style=for-the-badge&logo=googlecolab)](https://colab.research.google.com/your-colab)
 
-## 📦 Installation 📦
+</div>
 
-Download and extract the zip you find in the latest release!🌟
+## ✨ Introduction
 
-To run it, use Ilaria-RVC-Launcher.bat
+**KANOYO-RVC** is a powerful and user-friendly voice conversion toolkit that allows you to transform voices with exceptional quality and ease. Built with a focus on simplicity and performance, KANOYO-RVC provides a streamlined experience for both beginners and advanced users.
 
-For updates or to download the additional pretrains, use the Ilaria-RVC-Assistant.bat 💖
+> 💡 This project is based on [Ilaria-RVC](https://github.com/TheStingerX/Ilaria-RVC-Mainline) with significant code restructuring and performance improvements.
 
-## 🖥️ Usage 🖥️
+## 🔥 Key Features
 
-Once the project is completed and available for installation, detailed instructions on how to use the application will be provided here.
-This will include steps to configure the application, start the application, and use the various features of the application. 🌐
+<div align="center">
+  
+| 🚀 Fast Inference | 🎙️ Quality Voice Conversion | 🤖 Built-in TTS |
+| :---: | :---: | :---: |
+| Optimized for speed | High-fidelity results | Multiple TTS engines |
 
-## 🌟 Features 🌟
+| 🧠 Easy Training | 🔍 Model Browser | 🔧 Modular Design |
+| :---: | :---: | :---: |
+| Train your own models | Find and download models | Clean, maintainable code |
 
-Ilaria RVC offers a range of features, including:
+</div>
 
-- 🎙️ **Convert audio with a desired voice model**:  
-With Ilaria RVC, you can transform any audio using the voice model you prefer. It’s like having a personal voice-over artist at your fingertips.
+## 📦 Installation
 
-- ⚡ **Fast Inference and Training**:  
-Thanks to code optimization and the use of advanced hardware, Ilaria RVC will be able to perform model inference and training in record time.
-This will save you precious time and allow you to focus on what really matters.
+```bash
+# Clone the repository
+git clone https://github.com/your-username/KANOYO-RVC.git
 
-- 💾 **Download a voice model directly from the interface**:  
-You can directly download models with the download without using any other interface, How convenient is that?
+# Navigate to the project directory
+cd KANOYO-RVC
 
-- 🔄 **Automatic Model Import**:  
-No more manual uploading of your models. With automatic import, Ilaria RVC will be able to detect and import your models as soon as they become available.
+# Install dependencies
+pip install -r requirements.txt
+```
 
-- 🚀 **Advanced and cutting-edge options for conversion**:  
-Ilaria RVC offers conversion options that are at the forefront of AI. You can tailor your experience to your specific needs.
+For Windows users, we provide convenient batch files:
+- `KANOYO-RVC-Launcher.bat` - Start the application
+- `KANOYO-RVC-Assistant.bat` - Update and download additional resources
 
-- 🧠 **Custom Model Training**:  
-With Ilaria RVC, you can train your own custom voice models. This will give you even more control over the quality and characteristics of the generated voice.
+## 🖥️ Usage
 
-- 🛠️ **Constantly updated by Ilaria and AI Hub engineers**:  
-Ilaria RVC is a product in constant evolution. Ilaria and the team of AI Hub engineers are constantly working to improve and update the system.
+```bash
+# Start the web interface
+python infer-web-new.py
+```
 
-- 🗣️ **A choice of 3 different TTS models including Ilaria TTS**:  
-You’re spoilt for choice with Ilaria RVC. You can choose from three different voice synthesis models, including Ilaria TTS.
+The application has several main tabs:
+- **Inference**: Convert audio with AI voice models
+- **Train**: Create your own voice models
+- **Extra**: Additional utilities and features
+- **Misc**: Miscellaneous tools and settings
 
-- ✔️ **Ease of use for inexperienced users**:  
-Don’t worry if you’re not a tech whiz. Ilaria RVC is designed to be easy to use for everyone, regardless of their level of experience.
+## 🏗️ Project Structure
 
-## 🙏 Credits 🙏
+KANOYO-RVC features a modular code structure for better maintainability:
 
-### Developers
+```
+KANOYO-RVC/
+├── tabs/
+│   ├── __init__.py      # Package initialization
+│   ├── common.py        # Shared components and utilities
+│   ├── inference.py     # Voice conversion functionality
+│   ├── train.py         # Model training functionality
+│   ├── extra.py         # Additional features
+│   └── misc.py          # Miscellaneous components
+├── infer-web-new.py     # Main application entry point
+└── ...                  # Other files and directories
+```
 
+## 📋 Detailed Features
+
+### Voice Conversion
+- 🔊 High-quality voice transformation
+- ⚡ Fast processing with GPU acceleration
+- 🎛️ Advanced pitch and timbre control
+
+### Model Training
+- 🎯 Create custom voice models
+- 📊 Training visualization and metrics
+- ⚙️ Customizable training parameters
+
+### Utilities
+- 🔄 Model downloading and importing
+- 🔍 Voice analysis tools
+- 🎵 Audio preprocessing
+
+## 🛠️ Technologies
+
+- **PyTorch** - Deep learning framework
+- **Gradio** - Web interface
+- **Fairseq** - Sequence modeling toolkit
+- **librosa** - Audio analysis
+
+## 🙏 Credits
+
+### Original Project
+- **Ilaria-RVC** - The foundation this project is built upon
+
+### Special Thanks to Ilaria Team
 - **Ilaria**: Founder, Lead Developer
 - **Yui**: Training feature
 - **GDR-**: Inference feature
-- **Poopmaster**: Model downloader, Model importer
-- **kitlemonfoot**: Ilaria TTS implementation
-- **eddycrack864**: UVR5 implementation
-- **Mikus**: Ilaria Updater & Downloader
-- **Diablo**: Pretrain Automation, UI features, Various fixes
+- And all other contributors to the original project
 
-### Beta Tester
+### In loving memory of JLabDX 🕊️
 
-- **Charlotte**: Beta Tester, Advisor
-- **mrm0dz**: Beta Tester, Advisor
-- **RME**: Beta Tester
-- **Delik**: Beta Tester
-- **inductivegrub**: Beta Tester
-- **l3af**: Beta Tester, Helper
+## 📄 License
 
-### Pretrains Makers
+This project is released under the license terms of the original Ilaria-RVC project.
 
-- **simplcup**: Ov2Super
-- **mustar22**: RIN_E3 & Snowie
+---
 
-### Colab Port
-
-- **Angetyde**
-- **l3af**
-- **Poopmaster**
-- **Hina**
-
-### HuggingFace Port
-
-- **Nick088**
-
-### Other
-
-- **RVC Project**: Original Developers
-- **yumereborn**: Ilaria RVC image
-
-### **In loving memory of JLabDX** 🕊️
-
-## 🤝 Contributing 🤝
-
-Interested in contributing to this project? Ilaria is always looking for collaborators.  
-Feel free to open a pull request on Github.
-
-## 📄 License 📄
-
-This project is released under the `INCU` license.  
-For more details, please check the license file.  
-For further questions feel free to contact Ilaria.
+<div align="center">
+  
+  Made with ❤️ by KANOYO
+  
+  <img src="https://img.shields.io/badge/Powered%20by-AI%20Voice%20Technology-9cf?style=for-the-badge" alt="Powered by AI Voice Technology">
+  
+</div>
