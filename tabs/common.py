@@ -106,6 +106,14 @@ sr_dict = {
     "SnowieV3.1-RinE3-40K": 40000, "Italia-32k": 32000,
 }
 
+# Вспомогательные функции
+def get_pretrained_files(directory, keyword, filter_str):
+    file_paths = {}
+    for filename in os.listdir(directory):
+        if filename.endswith(".pth") and keyword in filename and filter_str in filename:
+            file_paths[filename] = os.path.join(directory, filename)
+    return file_paths
+
 # Получение предобученных моделей
 pretrained_directory = "assets/pretrained_v2"
 pretrained_path = {filename: os.path.join(pretrained_directory, filename) 
@@ -146,14 +154,6 @@ else:
 gpus = "-".join([i[0] for i in gpu_infos])
 
 F0GPUVisible = config.dml is False
-
-# Вспомогательные функции
-def get_pretrained_files(directory, keyword, filter_str):
-    file_paths = {}
-    for filename in os.listdir(directory):
-        if filename.endswith(".pth") and keyword in filename and filter_str in filename:
-            file_paths[filename] = os.path.join(directory, filename)
-    return file_paths
 
 def get_pretrained_models(path_str, f0_str, sr2):
     sr_mapping = pretrain_helper.get_pretrained_models(f0_str)
