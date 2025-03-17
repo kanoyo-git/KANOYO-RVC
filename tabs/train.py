@@ -483,7 +483,7 @@ def create_train_tab():
                     show = gr.Textbox(label=i18n('Status'))
                     transfer_button = gr.Button(i18n('Upload Dataset to the folder'), variant="primary")
                     transfer_button.click(
-                        transfer_files,
+                        fn=transfer_files,
                         inputs=[file_thin],
                         outputs=show,
                     )

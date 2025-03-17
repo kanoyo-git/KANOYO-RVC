@@ -197,11 +197,7 @@ def create_inference_tab():
                 download_button = gr.Button(i18n("Download"))
             with gr.Row():
                 status_bar = gr.Textbox(label=i18n("Download Status"))
-            download_button.click(
-                download_from_url, 
-                inputs=[url, model], 
-                outputs=status_bar
-            )
+            download_button.click(fn=download_from_url, inputs=[url, model], outputs=[status_bar])
 
         # Подвкладка Import Models
         with gr.TabItem(i18n("Import Models")):
@@ -213,11 +209,7 @@ def create_inference_tab():
             def import_button_click(file):
                 return import_files(file)
                 
-            import_button.click(
-                import_button_click, 
-                inputs=file_upload, 
-                outputs=import_status
-            )
+            import_button.click(fn=import_button_click, inputs=file_upload, outputs=import_status)
 
         # Подвкладка Batch Inference
         with gr.TabItem(i18n("Batch Inference")):
