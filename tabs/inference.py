@@ -26,9 +26,14 @@ vc_transform0 = gr.Slider(
     value=0,
     step=1,
 )
-f0_file = gr.File(
-    label=i18n("F0 curve file [optional]"),
-    visible=False,
+f0_file = gr.Slider(
+    minimum=0.0, 
+    maximum=1.0, 
+    step=0.1, 
+    value=0.9, 
+    label="Pitch Extraction: 0 for Harvest, 1 for RMVPE", 
+    visible=False, 
+    interactive=True
 )
 f0method0 = gr.Radio(
     label=i18n("Pitch Extraction, rmvpe is best"),

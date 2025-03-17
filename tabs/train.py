@@ -668,4 +668,15 @@ def create_train_tab():
                    info,
                    api_name="train_start",
                 )
-                but4.click(train_index, [exp_dir1, version19], info) 
+                but4.click(train_index, [exp_dir1, version19], info)
+
+        gr.Examples(
+            examples=[
+                ["path/to/audio1.wav", 32000],
+                ["path/to/audio2.wav", 40000]
+            ],
+            inputs=[audio_input, sr_select],
+            label="Training Examples"
+        )
+
+    return train_block 

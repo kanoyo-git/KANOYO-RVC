@@ -52,5 +52,5 @@ librosa
 gdown
 git+https://github.com/pgp/mega.py.git
 fastapi
-gradio==4.43.0
+gradio
 pydantic
