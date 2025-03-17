@@ -10,10 +10,11 @@ from sklearn.cluster import MiniBatchKMeans
 import faiss
 import logging
 import traceback
+
 from tabs.common import (
     i18n, now_dir, config, get_pretrained_models, sr_dict, F0GPUVisible,
     gpu_info, default_batch_size, gpus, if_done, if_done_multi, pretrained_G_files, 
-    pretrained_D_files, logger, create_ui_element
+    pretrained_D_files, logger
 )
 
 def change_sr2(sr2, if_f0_3, version19):
@@ -446,7 +447,7 @@ def transfer_files(filething, dataset_dir='dataset/'):
     return i18n("Transferred files to dataset directory!")
 
 def create_train_tab():
-    with gr.Tab(label=i18n("Training")):
+    with gr.TabItem(i18n("Train")):
         gr.Markdown(value=i18n(""))
         with gr.Row():
             exp_dir1 = gr.Textbox(label=i18n("Model Name"), value="test-model")
@@ -474,11 +475,8 @@ def create_train_tab():
         with gr.Group():
             gr.Markdown(value=i18n(""))
             with gr.Row():
-                trainset_dir4 = create_ui_element(
-                    gr.Textbox,
-                    label=i18n("Path to Dataset"),
-                    placeholder=i18n("Path to your dataset"),
-                    elem_classes=["full-width"]
+                trainset_dir4 = gr.Textbox(
+                    label=i18n("Path to Dataset"), value="dataset"
                 )
                 with gr.Accordion(i18n('Upload Dataset (alternative)'), open=False, visible=True):
                     file_thin = gr.Files(label=i18n('Audio Files'))

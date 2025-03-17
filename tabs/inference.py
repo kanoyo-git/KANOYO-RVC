@@ -2,7 +2,7 @@ import gradio as gr
 from tabs.common import (
     i18n, vc, names, indexes_list, audio_paths, weight_root, index_root, 
     change_choices, clean, css, now_dir, config, F0GPUVisible, import_files,
-    language_dict, ilariavoices, asyncio, edge_tts, download_from_url, create_ui_element
+    language_dict, ilariavoices, asyncio, edge_tts, download_from_url
 )
 
 # Общие переменные для вкладки Inference
@@ -104,7 +104,7 @@ file_index4 = gr.Dropdown(
 )
 
 def create_inference_tab():
-    with gr.Tab(label=i18n("Inference")):
+    with gr.TabItem(i18n("Inference")):
         with gr.Row():
             sid0 = gr.Dropdown(label=i18n("Voice"), choices=sorted(names))
             sid1 = sid0
@@ -122,12 +122,9 @@ def create_inference_tab():
             with gr.Group():
                 with gr.Row():
                     with gr.Column():                                
-                        input_audio = create_ui_element(
-                            gr.Audio, 
-                            label=i18n("Input audio"), 
-                            sources=["upload", "microphone"],
+                        input_audio1 = gr.Audio(
+                            label=i18n("Upload Audio file"),
                             type="filepath",
-                            elem_classes=["input-audio"]
                         )
                         file_index2.render()
                         input_audio0 = gr.Dropdown(
@@ -174,7 +171,7 @@ def create_inference_tab():
                         [
                             spk_item,
                             input_audio0,
-                            input_audio,
+                            input_audio1,
                             vc_transform0,
                             f0_file,
                             f0method0,
