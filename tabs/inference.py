@@ -26,14 +26,9 @@ vc_transform0 = gr.Slider(
     value=0,
     step=1,
 )
-f0_file = gr.Slider(
-    minimum=0.0, 
-    maximum=1.0, 
-    step=0.1, 
-    value=0.9, 
-    label="Pitch Extraction: 0 for Harvest, 1 for RMVPE", 
-    visible=False, 
-    interactive=True
+f0_file = gr.File(
+    label=i18n("F0 curve file [optional]"),
+    visible=False,
 )
 f0method0 = gr.Radio(
     label=i18n("Pitch Extraction, rmvpe is best"),
@@ -202,7 +197,11 @@ def create_inference_tab():
                 download_button = gr.Button(i18n("Download"))
             with gr.Row():
                 status_bar = gr.Textbox(label=i18n("Download Status"))
-            download_button.click(fn=download_from_url, inputs=[url, model], outputs=[status_bar])
+            download_button.click(
+                download_from_url, 
+                inputs=[url, model], 
+                outputs=status_bar
+            )
 
         # Подвкладка Import Models
         with gr.TabItem(i18n("Import Models")):
@@ -214,7 +213,11 @@ def create_inference_tab():
             def import_button_click(file):
                 return import_files(file)
                 
-            import_button.click(fn=import_button_click, inputs=file_upload, outputs=import_status)
+            import_button.click(
+                import_button_click, 
+                inputs=file_upload, 
+                outputs=import_status
+            )
 
         # Подвкладка Batch Inference
         with gr.TabItem(i18n("Batch Inference")):

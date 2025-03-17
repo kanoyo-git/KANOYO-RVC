@@ -483,7 +483,7 @@ def create_train_tab():
                     show = gr.Textbox(label=i18n('Status'))
                     transfer_button = gr.Button(i18n('Upload Dataset to the folder'), variant="primary")
                     transfer_button.click(
-                        fn=transfer_files,
+                        transfer_files,
                         inputs=[file_thin],
                         outputs=show,
                     )
@@ -668,15 +668,4 @@ def create_train_tab():
                    info,
                    api_name="train_start",
                 )
-                but4.click(train_index, [exp_dir1, version19], info)
-
-        gr.Examples(
-            examples=[
-                ["path/to/audio1.wav", 32000],
-                ["path/to/audio2.wav", 40000]
-            ],
-            inputs=[audio_input, sr_select],
-            label="Training Examples"
-        )
-
-    return train_block 
+                but4.click(train_index, [exp_dir1, version19], info) 

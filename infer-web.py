@@ -933,7 +933,7 @@ css = """
 vc_output1 = gr.Textbox(label=i18n("Console"))
 vc_output2 = gr.Audio(label=i18n("Audio output"))
 
-with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
+with gr.Blocks(theme=gr.themes.Base(), title="Kanoyo", css=css) as app:
     gr.HTML('''
         <h1 style="display: flex; align-items: center;">
                 <img src="https://art.pixilart.com/sr220411b1340ff.png" alt="heart" style="width:42px;height:42px;border-radius:10%;margin-right:10px;">
@@ -1779,14 +1779,14 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
     if config.iscolab:
         app.launch(
             share=True,
-            server_port=config.listen_port,
-            favicon_path="./assets/favicon.ico",
+            port=config.listen_port,
+            favicon=("./assets/favicon.ico"),
         )
     else:
         app.launch(
-            server_name="0.0.0.0",
-            inbrowser=not config.noautoopen,
-            server_port=config.listen_port,
-            favicon_path="./assets/favicon.ico",
+            host="0.0.0.0",
+            open_browser=not config.noautoopen,
+            port=config.listen_port,
+            favicon=("./assets/favicon.ico"),
             quiet=True,
         )

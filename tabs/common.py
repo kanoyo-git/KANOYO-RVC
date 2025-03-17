@@ -388,12 +388,4 @@ css = """
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-"""
-
-# Новый код:
-btn.click(
-    fn=function_name, 
-    inputs=[...], 
-    outputs=[...],
-    api_name="function_endpoint"  # Опциональный API-эндпоинт
-) 
+""" 
