@@ -4,7 +4,7 @@ import wave
 from tabs.common import (
     i18n, vc, ilariavoices, language_dict, now_dir,
     get_audio_duration, generate_spectrogram_and_get_info, merge, calculate_remaining_time,
-    pretrained_G_files, pretrained_D_files, config, names
+    pretrained_G_files, pretrained_D_files, config, names, create_ui_element
 )
 from tabs.inference import (
     tts_and_convert, vc_output1, vc_output2, spk_item, vc_transform0, f0_file,
@@ -13,7 +13,7 @@ from tabs.inference import (
 )
 
 def create_extra_tab():
-    with gr.TabItem(i18n("Extra")):
+    with gr.Tab(label=i18n("Extra")):
         # Подраздел IlariaTTS
         with gr.Accordion('IlariaTTS', open=False):
             with gr.Column():
@@ -283,3 +283,28 @@ def create_extra_tab():
                             
             ### **In loving memory of JLabDX** 🕊️
             ''') 
+
+        # Обновлённые компоненты и их размещение
+        with gr.Blocks():
+            with gr.Row():
+                with gr.Column(scale=2):
+                    # Обновлённый способ создания элементов с контролем размера
+                    input_text = create_ui_element(
+                        gr.Textbox,
+                        label=i18n("Input Text"),
+                        lines=4,
+                        elem_classes=["input-text"]
+                    )
+                
+                with gr.Column(scale=1):
+                    # Обновлённые кнопки с вариантами стиля
+                    process_button = gr.Button(
+                        i18n("Process"), 
+                        variant="primary",
+                        size="lg"
+                    )
+                    clear_button = gr.Button(
+                        i18n("Clear"), 
+                        variant="secondary",
+                        size="lg"
+                    ) 

@@ -369,23 +369,49 @@ def calculate_remaining_time(epochs, seconds_per_epoch):
     else:
         return f"{int(hours)} hours and {int(minutes)} minutes"
 
-# CSS для интерфейса
+# Обновление CSS для Gradio 5.x
 css = """
-.primary.svelte-1jrzxu {
-  background: linear-gradient(270deg, blue, darkcyan);
-  background-size: 200% 200%;
-  color: white;
-  will-change: background;
+.gradio-container {
+    max-width: 1100px !important;
+    margin: auto;
 }
+.output-image, .input-image {
+    height: auto !important;
+}
+.gr-form {
+    flex-grow: 1;
+}
+.gr-box {
+    border-radius: 8px;
+    padding: 15px;
+}
+.gr-padded {
+    padding: 16px;
+}
+.gr-input, .gr-dropdown, .gr-textbox, .gr-textarea {
+    box-shadow: none !important;
+}
+.gr-slider {
+    padding: 8px 0;
+}
+.gr-button {
+    border-radius: 6px;
+}
+"""
 
-.primary.svelte-1jrzxu:hover {
-  animation: Gradient 4s linear infinite;
-  background: linear-gradient(270deg, darkcyan, blue);
-}
-
-@keyframes Gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-""" 
+# Обновление функции для создания интерфейсов
+def create_ui_element(element_type, *args, **kwargs):
+    """Обёртка для создания элементов UI с корректными размерами для Gradio 5.x"""
+    # Добавляем стандартные размеры для элементов
+    if 'elem_classes' not in kwargs:
+        kwargs['elem_classes'] = []
+    
+    # Настройка для специфичных элементов
+    if element_type == gr.Textbox:
+        if 'lines' not in kwargs:
+            kwargs['lines'] = 1
+        if 'scale' not in kwargs:
+            kwargs['scale'] = 1
+    
+    # Возвращаем созданный элемент
+    return element_type(*args, **kwargs) 
