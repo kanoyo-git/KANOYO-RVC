@@ -272,6 +272,41 @@ def change_choices():
         "choices": sorted(audio_paths), "__type__": "update"
     }
 
+def safe_vc_single(*args):
+    try:
+        if args[0] == 0 and (args[1] is None or args[1] == "") and (args[2] is None or args[2] == ""):
+            raise gr.Error("Пожалуйста, выберите модель голоса и загрузите аудио для обработки")
+        
+        if args[1] is None and args[2] is None:
+            raise gr.Error("Пожалуйста, загрузите аудиофайл или выберите из списка")
+        
+        logger.info("Начинаем конвертацию голоса...")
+        result = vc.vc_single(*args)
+        
+        if result[1] is None or (isinstance(result[1], tuple) and result[1][0] is None):
+            error_msg = result[0] if isinstance(result[0], str) else "Не удалось преобразовать голос"
+            raise gr.Error(error_msg)
+            
+        return result
+    except gr.Error as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Ошибка при конвертации: {str(e)}\n{traceback.format_exc()}")
+        raise gr.Error(f"Произошла ошибка: {str(e)}")
+
+def safe_get_vc(sid, protect0, protect1):
+    try:
+        if sid == "" or sid == []:
+            raise gr.Error("Пожалуйста, выберите модель голоса")
+        
+        result = vc.get_vc(sid, protect0, protect1)
+        logger.info(f"Модель {sid} успешно загружена")
+        return result
+    except Exception as e:
+        logger.error(f"Ошибка при загрузке модели {sid}: {str(e)}")
+        error_msg = f"Не удалось загрузить модель {sid}. Ошибка: {str(e)}"
+        raise gr.Error(error_msg)
+
 # Define the tts_and_convert function
 def tts_and_convert(ttsvoice, text, spk_item, vc_transform, f0_file, f0method, file_index1, file_index2, index_rate, filter_radius, resample_sr, rms_mix_rate, protect):
 
@@ -1806,19 +1841,6 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
                 ### **In loving memory of JLabDX** 🕊️
                 ''')
                 
-                def safe_get_vc(sid, protect0, protect1):
-                    try:
-                        if sid == "" or sid == []:
-                            raise gr.Error("Пожалуйста, выберите модель голоса")
-                        
-                        result = vc.get_vc(sid, protect0, protect1)
-                        logger.info(f"Модель {sid} успешно загружена")
-                        return result
-                    except Exception as e:
-                        logger.error(f"Ошибка при загрузке модели {sid}: {str(e)}")
-                        error_msg = f"Не удалось загрузить модель {sid}. Ошибка: {str(e)}"
-                        raise gr.Error(error_msg)
-
                 sid0.change(
                     fn=safe_get_vc,
                     inputs=[sid0, protect0, protect1],
@@ -1843,25 +1865,3 @@ with gr.Blocks(theme='gradio/base', title="Kanoyo", css=css) as app:
             favicon_path="./assets/favicon.ico",
             quiet=True,
         )
-
-def safe_vc_single(*args):
-    try:
-        if args[0] == 0 and (args[1] is None or args[1] == "") and (args[2] is None or args[2] == ""):
-            raise gr.Error("Пожалуйста, выберите модель голоса и загрузите аудио для обработки")
-        
-        if args[1] is None and args[2] is None:
-            raise gr.Error("Пожалуйста, загрузите аудиофайл или выберите из списка")
-        
-        logger.info("Начинаем конвертацию голоса...")
-        result = vc.vc_single(*args)
-        
-        if result[1] is None or (isinstance(result[1], tuple) and result[1][0] is None):
-            error_msg = result[0] if isinstance(result[0], str) else "Не удалось преобразовать голос"
-            raise gr.Error(error_msg)
-            
-        return result
-    except gr.Error as e:
-        raise e
-    except Exception as e:
-        logger.error(f"Ошибка при конвертации: {str(e)}\n{traceback.format_exc()}")
-        raise gr.Error(f"Произошла ошибка: {str(e)}")
