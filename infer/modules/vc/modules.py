@@ -175,16 +175,43 @@ class VC:
     ):
         # if the type of input_audio_path is temporaryFileWrapper, it means the user has used a voice recording, so use the filepath of the temporary file
         if (input_audio_path_uploaded is None) and (input_audio_path_select is None):
-            return "You need to upload an audio or select from audios", None
-        f0_up_key = int(f0_up_key)
+            return "Необходимо загрузить аудио или выбрать из списка", None
+
+        if sid == "" or sid == []:
+            return "Ошибка: Необходимо выбрать голосовую модель из выпадающего списка 'Voice'", None
+
+        if self.net_g is None or self.pipeline is None:
+            logger.warning(f"Модель {sid} не загружена правильно. Попытка повторной загрузки...")
+            try:
+                self.get_vc(sid, protect)
+                if self.net_g is None or self.pipeline is None:
+                    logger.error(f"Не удалось загрузить модель {sid} даже после повторной попытки")
+                    return "Ошибка: Не удалось загрузить голосовую модель. Попробуйте выбрать другую модель или перезапустить приложение.", None
+                logger.info(f"Модель {sid} успешно загружена после повторной попытки")
+            except Exception as e:
+                logger.error(f"Ошибка при загрузке модели {sid}: {str(e)}")
+                return f"Ошибка при загрузке модели: {str(e)}", None
+            
+        try:
+            f0_up_key = int(f0_up_key)
+        except ValueError:
+            return "Ошибка: Значение высоты тона должно быть числом", None
+
+        input_audio_path = None
         if (isinstance(input_audio_path_uploaded, str) and os.path.isfile(input_audio_path_uploaded)) and (isinstance(input_audio_path_select, str) and os.path.isfile(input_audio_path_select)):
-            print("Dual input!!! Using uploaded instead of selected.")
+            logger.info("Найдено два источника аудио. Используется загруженный файл.")
             input_audio_path = open(input_audio_path_uploaded, 'rb')
-        if (not (isinstance(input_audio_path_uploaded, str) and os.path.isfile(input_audio_path_uploaded))) and (isinstance(input_audio_path_select, str) and os.path.isfile(input_audio_path_select)):
-            print("Using Selected file")
-            input_audio_path = open(input_audio_path_select, 'rb')           
+        elif (not (isinstance(input_audio_path_uploaded, str) and os.path.isfile(input_audio_path_uploaded))) and (isinstance(input_audio_path_select, str) and os.path.isfile(input_audio_path_select)):
+            logger.info("Используется выбранный файл")
+            input_audio_path = open(input_audio_path_select, 'rb')
+        else:
+            return "Ошибка: Не удалось открыть аудиофайл", None
 
         try:
+            if input_audio_path is None or not hasattr(input_audio_path, 'name'):
+                return "Ошибка: Недопустимый аудиофайл", None
+                
+            logger.info(f"Загрузка аудио из {input_audio_path.name}")
             audio = load_audio(input_audio_path.name, 16000)
             audio_max = np.abs(audio).max() / 0.95
             if audio_max > 1:
@@ -192,7 +219,10 @@ class VC:
             times = [0, 0, 0]
 
             if self.hubert_model is None:
+                logger.info("Загрузка модели Hubert")
                 self.hubert_model = load_hubert(self.config)
+                if self.hubert_model is None:
+                    return "Ошибка: Не удалось загрузить модель Hubert", None
 
             file_index = (
                 (
@@ -205,8 +235,16 @@ class VC:
                 )
                 if file_index != ""
                 else file_index2
-            )  # 防止小白写错，自动帮他替换掉
+            )
 
+            if self.net_g is None:
+                return "Ошибка: Модель голоса не инициализирована", None
+            if self.pipeline is None:
+                return "Ошибка: Pipeline не инициализирован", None
+            if audio is None or len(audio) == 0:
+                return "Ошибка: Аудио не загружено или пустое", None
+
+            logger.info("Запуск обработки голоса через pipeline")
             audio_opt = self.pipeline.pipeline(
                 self.hubert_model,
                 self.net_g,
@@ -227,24 +265,39 @@ class VC:
                 protect,
                 f0_file,
             )
+            
+            if audio_opt is None:
+                return "Ошибка: Не удалось обработать аудио", None
+                
             if self.tgt_sr != resample_sr >= 16000:
                 tgt_sr = resample_sr
             else:
                 tgt_sr = self.tgt_sr
+                
             index_info = (
                 "Index:\n%s." % file_index
                 if os.path.exists(file_index)
                 else "Index not used."
             )
+            
+            logger.info("Преобразование голоса успешно завершено")
             return (
-                "Success.\n%s\nTime:\nnpy: %.2fs, f0: %.2fs, infer: %.2fs."
+                "Успешно.\n%s\nВремя:\nnpy: %.2fs, f0: %.2fs, infer: %.2fs."
                 % (index_info, *times),
                 (tgt_sr, audio_opt),
             )
-        except:
+        except Exception as e:
             info = traceback.format_exc()
-            logger.warning(info)
-            return info, (None, None)
+            logger.error(f"Ошибка при обработке аудио: {str(e)}\n{info}")
+            
+            if "CUDA out of memory" in info:
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                return "Ошибка: Недостаточно памяти GPU. Попробуйте освободить память или использовать файл меньшего размера.", None
+            elif "pipeline" in info and "NoneType" in info:
+                return "Ошибка: Необходимо выбрать модель голоса перед конвертацией. Выберите модель из списка и попробуйте снова.", None
+            
+            return f"Ошибка при обработке аудио: {str(e)}", None
 
     def vc_multi(
         self,
